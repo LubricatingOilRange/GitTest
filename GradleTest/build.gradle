@@ -1,0 +1,46 @@
+apply plugin: 'com.android.application'
+apply from: "idcapture.gradle"
+
+android {
+    compileSdkVersion project.ext.android.compileSdkVersion
+
+    defaultConfig {
+        applicationId project.ext.android.applicationId
+        minSdkVersion project.ext.android.minSdkVersion
+        targetSdkVersion project.ext.android.targetSdkVersion
+        versionCode project.ext.android.versionCode
+        versionName project.ext.android.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false //如果发现错误，lint工具是否应该退出这个程序。true表示退出。
+    }
+
+    resourcePrefix 'idcapture_'//資源文件 添加前綴
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+
+    }
+}
+
+dependencies {
+    androidTestImplementation project.ext.dependencies["test-runner"]
+    androidTestImplementation project.ext.dependencies["espresso-core"]
+    testImplementation project.ext.dependencies["junit"]
+    implementation project.ext.dependencies["constraint_layout"]
+
+    //Base
+    implementation project.ext.dependencies["appcompat-v7"]
+}
+
+

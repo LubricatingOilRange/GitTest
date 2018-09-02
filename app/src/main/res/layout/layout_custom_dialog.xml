@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:padding="20dp"
+        android:gravity="center"
+        android:text="分蘖发呢ofo恩负我减肥法内发我份呢哦fineof弄窝囊废恩佛恩峰of弄完粉嫩"/>
+
+    <TextView
+        android:id="@+id/tv_confirm"
+        android:layout_width="match_parent"
+        android:padding="15dp"
+        android:textColor="#0070ba"
+        android:text="确认"
+        android:gravity="center"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:background="#0070ba"
+        android:layout_height="1dp" />
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="match_parent"
+        android:padding="15dp"
+        android:textColor="#0070ba"
+        android:text="取消"
+        android:gravity="center"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
