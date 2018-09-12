@@ -1,43 +1,69 @@
 package com.app.gittest;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int REQUEST_CODE_PERMISSION_CAMERA = 99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-         CommonDialogFragment.newInstance(0, R.style.anim_dialog, new CommonDialogFragment.OnDialogCallBack() {
-             @Override
-             public void onConfirm() {
-                 startActivity( getAppDetailSettingIntent());
-                ;
-                 Toast.makeText(getApplicationContext(),"确认了",Toast.LENGTH_SHORT).show();
-             }
-
-             @Override
-             public void onCancel() {
-                 Toast.makeText(getApplicationContext(),"取消了",Toast.LENGTH_SHORT).show();
-             }
-         }).show(getSupportFragmentManager(),"");
     }
-    private Intent getAppDetailSettingIntent() {
-        Intent localIntent = new Intent();
-        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (Build.VERSION.SDK_INT >= 9) {
-            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
-        } else if (Build.VERSION.SDK_INT <= 8) {
-            localIntent.setAction(Intent.ACTION_VIEW);
-            localIntent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
-            localIntent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        requestPermission(true);
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        requestPermission(false);
+    }
+
+    private void requestPermission(boolean showFragment) {
+        // thate have no camera permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            //request camera permission
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_PERMISSION_CAMERA);
+        } else {
+            if (showFragment) {
+               enterPermissionFragment();
+            }
         }
-        return localIntent;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // request camera permission successful
+        } else {
+            // request camera permission failure
+            enterPermissionFragment();
+        }
+    }
+
+    private void enterPermissionFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fl_container,new RequestPermissionFragment(),RequestPermissionFragment.class.getSimpleName())
+                .commitAllowingStateLoss();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }
